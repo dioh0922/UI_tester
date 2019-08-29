@@ -1,0 +1,40 @@
+.cell{
+	background: #FFFFFF;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	padding: 0;
+	float: left;
+}
+
+.cell_hidden{
+	width: 0px;
+	height: 0px;
+}
+
+.cell_double{
+	background: #FFFFFF;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 200px;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	padding: 0;
+	float: left;
+}
+
+.outer{
+	text-align: center;
+}
+
+.board{
+	margin: auto;
+	display: inline-block;
+}
+
+.board-row{
+	text-align: center;
+	clear: both;
+}

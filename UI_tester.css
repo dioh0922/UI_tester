@@ -9,14 +9,36 @@
 	float: left;
 }
 
+.cell_btn{
+	background: #AAAAAA;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	padding: 0;
+	float: left;
+}
+
 .cell_hidden{
 	width: 0px;
 	height: 0px;
 	display: none;
 }
 
-.cell_double{
-	background: #FFFFFF;
+.cell_text{
+	background: #FFDDDD;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-top: -1px;
+	margin-bottom: -1px;
+	padding: 0;
+	float: left;
+}
+
+.cell_doubletext{
+	background: #FFDDDD;
 	border: 1px solid #AAAAAA;
 	height: 100px;
 	width: 200px;
@@ -28,6 +50,13 @@
 
 .outer{
 	text-align: center;
+}
+
+.resetBtn{
+	clear: both;
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .board{

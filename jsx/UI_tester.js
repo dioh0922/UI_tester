@@ -13,9 +13,11 @@ function convertBtnFlg(val){
 	}else if(val == "text:2"){
 		flg = 2
 	}else if(val == "btn:1"){
-		flg = 0;
+		flg = 4;
 	}else if(val == "hidden"){
 		flg = -1;
+	}else if(val == "Img"){
+		flg = 99;
 	}else{
 		flg = 1;
 	}
@@ -28,12 +30,8 @@ ReactDOM.render(
 		<h2>
 			UI試作器：5*5くらいでフォームの見た目作る
 		</h2>
-		<p>子コンポーネントから別の子にイベントさせるには?</p>
 		<ul>
-			<li>子から親にクリックイベント</li>
-			<li>親で状態変化</li>
-			<li>親から子に状態＋再描画</li>
-			<li>setState→setStateで最後だけ描画されている?</li>
+			<li>2倍textboxで消した後に戻すには?</li>
 		</ul>
 	</div>,
 	document.getElementById("t1")
@@ -80,15 +78,17 @@ class Cell extends React.Component{
 					<option>{this.props.value}にtext:2</option>
 					<option>{this.props.value}にbtn:1</option>
 					<option>{this.props.value}にhidden</option>
+					<option>{this.props.value}にImg</option>
 				</select>
-			)
+			);
+		}else if( this.state.disp == 3){
+			return <img src="./Img/txtImg.png" className="cell" data-id={this.props.value}/>;
 		}else	if( this.state.disp == 2){
-			return <input className="cell_double" type="text"
-			value={this.state.textAreaValue}
-			onChange={this.handleOnChange.bind(this)}
-			/>;
+			return <img src="./Img/txtImg.png" className="cell_doubletext" data-id={this.props.value}/>;
 		}else if( this.state.disp == -1){
 			return <input className="cell_hidden" type="button" value={this.props.value}/>;
+		}else if( this.state.disp == 4){
+			return <img src="./Img/btnImg.png" className="cell" data-id={this.props.value}/>;
 		}else{
 			return <input className="cell" type="button" value={this.props.value}/>;
 		}
@@ -106,11 +106,13 @@ class Row extends React.Component{
 		}
 	}
 
-	//指定したセルの表示状態を変更する処理
-	changeDispFlg(i, flg){
-		const arr = this.state.disp.slice();
-		arr[i] = flg;
-		this.setState({disp:arr});
+	allResetRow(){
+		const clearFlg = 0;
+		this.refs.btnRef0.setCellMode(clearFlg);
+		this.refs.btnRef1.setCellMode(clearFlg);
+		this.refs.btnRef2.setCellMode(clearFlg);
+		this.refs.btnRef3.setCellMode(clearFlg);
+		this.refs.btnRef4.setCellMode(clearFlg);
 	}
 
 	renderCell(i){
@@ -120,10 +122,20 @@ class Row extends React.Component{
 
 	//一旦、子のコンポーネントからイベントを取り上げる
 	handleClick(e){
-		let id = e.target.value.split("に");
-		const idx = parseInt(id[0], 10) % 5;
 
-		let flg = convertBtnFlg(id[1]);
+		let id;
+		let flg;
+
+		if(typeof(e.target.value) != "string"){
+			id = e.target.getAttribute("data-id");
+			flg = 0;
+		}else{
+			let tmp_id = e.target.value.split("に");
+			id = tmp_id[0];
+			flg = convertBtnFlg(tmp_id[1]);
+		}
+
+		const idx = parseInt(id, 10) % 5;
 
 		switch (idx) {
 			case 0:
@@ -134,13 +146,13 @@ class Row extends React.Component{
 				break;
 			case 1:
 				this.refs.btnRef1.setCellMode(flg);
-				if(flg == 2){
+				if(flg == 2 && this.refs.btnRef2.getCellMode() != 2){
 					this.refs.btnRef2.setCellMode(-1);
 				}
 				break;
 			case 2:
 				this.refs.btnRef2.setCellMode(flg);
-				if(flg == 2){
+				if(flg == 2 && this.refs.btnRef3.getCellMode() != 2){
 					this.refs.btnRef3.setCellMode(-1);
 				}
 				break;
@@ -151,21 +163,14 @@ class Row extends React.Component{
 				}
 				break;
 			case 4:
-				this.refs.btnRef4.setCellMode(flg);
+				if(flg != 2){
+					this.refs.btnRef4.setCellMode(flg);
+				}
 				break;
 			default:
 				break;
 		}
 
-	}
-
-	componentDidUpdate(prevProps, prevState, snapshot){
-			this.render();
-			console.log(this.state.disp);
-	}
-
-	handleSelect(e){
-		console.log(e.target.value);
 	}
 
 	render(){
@@ -193,12 +198,25 @@ class Board extends React.Component{
 
 	//各行を表示する処理
 	renderRow(i){
-		return <Row value={i} />;
+		const refName = "rowRef" + (i / 5);
+		return <Row value={i} ref={refName}/>;
+	}
+
+	allResetBoard(){
+		this.refs.rowRef0.allResetRow();
+		this.refs.rowRef1.allResetRow();
+		this.refs.rowRef2.allResetRow();
+		this.refs.rowRef3.allResetRow();
+		this.refs.rowRef4.allResetRow();
 	}
 
 	render(){
 		return(
 			<div className="board">
+				<input type="button"
+					className="resetBtn"
+					value="配置をリセットします"
+					onClick={this.allResetBoard.bind(this)}/>
 				{this.renderRow(0)}
 				{this.renderRow(5)}
 				{this.renderRow(10)}
@@ -215,8 +233,8 @@ ReactDOM.render(
 );
 
 
-//----------------
 /*
+//----------------
 class TheChild extends React.Component{
 	constructor(props){
 		super(props);
@@ -246,8 +264,13 @@ class TheParent extends React.Component{
 	render(){
 		return(
 			<div onClick={this.handleClick.bind(this)}>
-				<TheChild ref="child_1" value={1}/>
-				<TheChild ref="child_2" value={2}/>
+				<input type="text" value="textboxです" style={
+					{
+						backgroundColor: "#FFDDDD",
+						height: "40px",
+						width: "200px"
+					}
+				}/>
 			</div>
 		);
 	}

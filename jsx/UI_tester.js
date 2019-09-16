@@ -3,26 +3,79 @@ UIの画面設計の試作を行うWebアプリ
 DOMの制御を行い、動的に画面に部品を描画するプログラム
 */
 
+//表示モードのフラグ制御の識別子
+const DISPMODE = {
+	selBox: 1,
+	txtBox: 2,
+	txtBoxDbl: 3,
+	txtBoxTrpl: 4,
+	button: 5,
+	btnDbl: 6,
+	btnTrpl: 7,
+	hidden: -1,
+	redisp: -5,
+	default: 0
+};
+
+//選択用の表示文字列
+const SELECTITEM = {
+	selBox: "配置するものを選択",
+	txtBox: "入力欄(1マス)",
+	txtBoxDbl: "入力欄(2マス)",
+	txtBoxTrpl: "入力欄(3マス)",
+	button: "ボタン(1マス)",
+	btnDbl: "ボタン(2マス)",
+	btnTrpl: "ボタン(3マス)"
+}
+
+//対応する表示状態のフラグを決定する処理
 function convertBtnFlg(val){
 	let flg;
 
-	if(val == "配置するものを選択"){
-		flg = 1;
-	}else if(val == "text:1"){
-		flg = 3;
-	}else if(val == "text:2"){
-		flg = 2
-	}else if(val == "btn:1"){
-		flg = 4;
+	if(val == SELECTITEM.selBox){
+		flg = DISPMODE.selBox;
+	}else if(val == SELECTITEM.txtBox){
+		flg = DISPMODE.txtBox;
+	}else if(val == SELECTITEM.txtBoxDbl){
+		flg = DISPMODE.txtBoxDbl;
+	}else if(val == SELECTITEM.button){
+		flg = DISPMODE.button;
+	}else if(val == SELECTITEM.btnDbl){
+		flg = DISPMODE.btnDbl;
 	}else if(val == "hidden"){
-		flg = -1;
-	}else if(val == "Img"){
-		flg = 99;
+		flg = DISPMODE.hidden;
+	}else if(val == SELECTITEM.txtBoxTrpl){
+		flg = DISPMODE.txtBoxTrpl;
+	}else if(val == SELECTITEM.btnTrpl){
+		flg = DISPMODE.btnTrpl;
 	}else{
 		flg = 1;
 	}
 
 	return flg;
+}
+
+//隣のセルを非表示にするか判定する処理
+function checkNextCellHidden(flg){
+	//2倍ボタンか2倍入力欄は隣を消す
+	if(flg == DISPMODE.txtBoxDbl
+		|| flg == DISPMODE.btnDbl
+		|| flg == DISPMODE.txtBoxTrpl
+		|| flg == DISPMODE.btnTrpl){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+//3倍の大きさのフラグh￥か判定する処理
+function checkCellTripleFlg(flg){
+	if(flg == DISPMODE.txtBoxTrpl
+	|| flg == DISPMODE.btnTrpl){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 ReactDOM.render(
@@ -31,7 +84,7 @@ ReactDOM.render(
 			UI試作器：5*5くらいでフォームの見た目作る
 		</h2>
 		<ul>
-			<li>2倍textboxで消した後に戻すには?</li>
+			<li>3倍で戻すには?</li>
 		</ul>
 	</div>,
 	document.getElementById("t1")
@@ -41,10 +94,8 @@ class Cell extends React.Component{
 	constructor(props){
 		super(props);
 
-		this.handleSelect = this.handleSelect.bind(this);
 		this.state = {
 			disp: 0,
-			textAreaValue: "textboxです",
 		}
 	}
 
@@ -56,39 +107,34 @@ class Cell extends React.Component{
 		this.setState({disp:mode});
 	}
 
-	handleSelect(e){
-		console.log(e.target.value);
-		if(e.target.value == "無し"){
-			this.setState({value: null})
-		}
-	}
-
-	handleOnChange(e){
-		const text = e.target.value;
-		this.setState({textAreaValue: text});
-	}
-
 	render(){
 
-		if( this.state.disp == 1){
+		if(this.state.disp == DISPMODE.selBox){
 			return(
 				<select className="cell" >
-					<option>{this.props.value}に配置するものを選択</option>
-					<option>{this.props.value}にtext:1</option>
-					<option>{this.props.value}にtext:2</option>
-					<option>{this.props.value}にbtn:1</option>
-					<option>{this.props.value}にhidden</option>
-					<option>{this.props.value}にImg</option>
+					<option>{this.props.value}に{SELECTITEM.selBox}</option>
+					<option>{this.props.value}に{SELECTITEM.txtBox}</option>
+					<option>{this.props.value}に{SELECTITEM.txtBoxDbl}</option>
+					<option>{this.props.value}に{SELECTITEM.txtBoxTrpl}</option>
+					<option>{this.props.value}に{SELECTITEM.button}</option>
+					<option>{this.props.value}に{SELECTITEM.btnDbl}</option>
+					<option>{this.props.value}に{SELECTITEM.btnTrpl}</option>
 				</select>
 			);
-		}else if( this.state.disp == 3){
+		}else if(this.state.disp == DISPMODE.txtBox){
 			return <img src="./Img/txtImg.png" className="cell" data-id={this.props.value}/>;
-		}else	if( this.state.disp == 2){
-			return <img src="./Img/txtImg.png" className="cell_doubletext" data-id={this.props.value}/>;
-		}else if( this.state.disp == -1){
+		}else	if(this.state.disp == DISPMODE.txtBoxDbl){
+			return <img src="./Img/txtDblImg.png" className="cell_double" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.hidden){
 			return <input className="cell_hidden" type="button" value={this.props.value}/>;
-		}else if( this.state.disp == 4){
+		}else if(this.state.disp == DISPMODE.button){
 			return <img src="./Img/btnImg.png" className="cell" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.btnDbl){
+			return <img src="./Img/btnDblImg.png" className="cell_double" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.btnTrpl){
+			return <img src="./Img/btnTrplImg.png" className="cell_triple" data-id={this.props.valie}/>;
+		}else if(this.state.disp == DISPMODE.txtBoxTrpl){
+			return <img src="./Img/txtTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
 		}else{
 			return <input className="cell" type="button" value={this.props.value}/>;
 		}
@@ -125,10 +171,11 @@ class Row extends React.Component{
 
 		let id;
 		let flg;
+		let nextCellFlg;
 
 		if(typeof(e.target.value) != "string"){
 			id = e.target.getAttribute("data-id");
-			flg = 0;
+			flg = DISPMODE.redisp;
 		}else{
 			let tmp_id = e.target.value.split("に");
 			id = tmp_id[0];
@@ -139,34 +186,68 @@ class Row extends React.Component{
 
 		switch (idx) {
 			case 0:
+				nextCellFlg = this.refs.btnRef1.getCellMode();
+
+				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+					if(checkCellTripleFlg(flg)){
+						this.refs.btnRef2.setCellMode(DISPMODE.hidden);
+					}
+					this.refs.btnRef1.setCellMode(DISPMODE.hidden);
+				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
+					this.refs.btnRef1.setCellMode(DISPMODE.default);
+				}
+
 				this.refs.btnRef0.setCellMode(flg);
-				if(flg == 2 && this.refs.btnRef1.getCellMode() != 2){
-					this.refs.btnRef1.setCellMode(-1);
-				}
+
 				break;
+
 			case 1:
+				nextCellFlg = this.refs.btnRef2.getCellMode();
+
+				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+					this.refs.btnRef2.setCellMode(DISPMODE.hidden);
+				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
+					this.refs.btnRef2.setCellMode(DISPMODE.default);
+				}
+
 				this.refs.btnRef1.setCellMode(flg);
-				if(flg == 2 && this.refs.btnRef2.getCellMode() != 2){
-					this.refs.btnRef2.setCellMode(-1);
-				}
+
 				break;
+
 			case 2:
+				nextCellFlg = this.refs.btnRef3.getCellMode();
+
+				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+					this.refs.btnRef3.setCellMode(DISPMODE.hidden);
+				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
+					this.refs.btnRef3.setCellMode(DISPMODE.default);
+				}
+
 				this.refs.btnRef2.setCellMode(flg);
-				if(flg == 2 && this.refs.btnRef3.getCellMode() != 2){
-					this.refs.btnRef3.setCellMode(-1);
-				}
+
 				break;
+
 			case 3:
-				this.refs.btnRef3.setCellMode(flg);
-				if(flg == 2){
-					this.refs.btnRef4.setCellMode(-1);
+				nextCellFlg = this.refs.btnRef4.getCellMode();
+
+				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+					this.refs.btnRef4.setCellMode(DISPMODE.hidden);
+				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
+					this.refs.btnRef4.setCellMode(DISPMODE.default);
 				}
+
+				this.refs.btnRef3.setCellMode(flg);
+
 				break;
+
 			case 4:
-				if(flg != 2){
+				//右端からは2マスのものは配置しない
+				if(!checkNextCellHidden(flg)){
 					this.refs.btnRef4.setCellMode(flg);
 				}
+
 				break;
+
 			default:
 				break;
 		}
@@ -233,7 +314,7 @@ ReactDOM.render(
 );
 
 
-/*
+
 //----------------
 class TheChild extends React.Component{
 	constructor(props){
@@ -254,6 +335,7 @@ class TheChild extends React.Component{
 	}
 }
 
+/*
 //refで子に引数渡して子でsetStateさせる
 class TheParent extends React.Component{
 
@@ -262,18 +344,22 @@ class TheParent extends React.Component{
 	}
 
 	render(){
+
 		return(
 			<div onClick={this.handleClick.bind(this)}>
-				<input type="text" value="textboxです" style={
+				<input type="button" value="ボタンです" style={
 					{
-						backgroundColor: "#FFDDDD",
+//						backgroundColor: "#FFDDDD",
 						height: "40px",
-						width: "200px"
+						width: "600px",
+						marginTop: "10px",
 					}
 				}/>
 			</div>
 		);
+
 	}
+
 }
 
 ReactDOM.render(

@@ -68,7 +68,17 @@ function checkNextCellHidden(flg){
 	}
 }
 
-//3倍の大きさのフラグh￥か判定する処理
+//2倍の大きさのフラグか判定する処理
+function checkCellDoubleFlg(flg){
+	if(flg == DISPMODE.txtBoxDbl
+	|| flg == DISPMODE.btnDbl){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+//3倍の大きさのフラグか判定する処理
 function checkCellTripleFlg(flg){
 	if(flg == DISPMODE.txtBoxTrpl
 	|| flg == DISPMODE.btnTrpl){
@@ -84,7 +94,7 @@ ReactDOM.render(
 			UI試作器：5*5くらいでフォームの見た目作る
 		</h2>
 		<ul>
-			<li>3倍で戻すには?</li>
+			<li>隣とくっつけるのは?</li>
 		</ul>
 	</div>,
 	document.getElementById("t1")
@@ -132,7 +142,7 @@ class Cell extends React.Component{
 		}else if(this.state.disp == DISPMODE.btnDbl){
 			return <img src="./Img/btnDblImg.png" className="cell_double" data-id={this.props.value}/>;
 		}else if(this.state.disp == DISPMODE.btnTrpl){
-			return <img src="./Img/btnTrplImg.png" className="cell_triple" data-id={this.props.valie}/>;
+			return <img src="./Img/btnTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
 		}else if(this.state.disp == DISPMODE.txtBoxTrpl){
 			return <img src="./Img/txtTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
 		}else{
@@ -159,6 +169,49 @@ class Row extends React.Component{
 		this.refs.btnRef2.setCellMode(clearFlg);
 		this.refs.btnRef3.setCellMode(clearFlg);
 		this.refs.btnRef4.setCellMode(clearFlg);
+	}
+
+	searchHidden(id){
+
+		//別の要素のところ以降は非表示でも変えないようにするには?
+
+		const clearFlg = 0;
+
+		switch(id){
+			case 0:
+				if(this.refs.btnRef0.getCellMode() == DISPMODE.hidden){
+					this.refs.btnRef0.setCellMode(clearFlg);
+				}
+				break;
+
+			case 1:
+				if(this.refs.btnRef1.getCellMode() == DISPMODE.hidden){
+					this.refs.btnRef1.setCellMode(clearFlg);
+				}
+				break;
+
+			case 2:
+				if(this.refs.btnRef2.getCellMode() == DISPMODE.hidden){
+					this.refs.btnRef2.setCellMode(clearFlg);
+				}
+				break;
+
+			case 3:
+				if(this.refs.btnRef3.getCellMode() == DISPMODE.hidden){
+					this.refs.btnRef3.setCellMode(clearFlg);
+				}
+				break;
+
+			case 4:
+				if(this.refs.btnRef4.getCellMode() == DISPMODE.hidden){
+					this.refs.btnRef4.setCellMode(clearFlg);
+				}
+				break;
+
+			default:
+				break;
+		}
+
 	}
 
 	renderCell(i){
@@ -188,13 +241,19 @@ class Row extends React.Component{
 			case 0:
 				nextCellFlg = this.refs.btnRef1.getCellMode();
 
-				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+				if(checkNextCellHidden(flg)){
 					if(checkCellTripleFlg(flg)){
 						this.refs.btnRef2.setCellMode(DISPMODE.hidden);
 					}
 					this.refs.btnRef1.setCellMode(DISPMODE.hidden);
-				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
-					this.refs.btnRef1.setCellMode(DISPMODE.default);
+				}else if(flg == DISPMODE.redisp){
+					//再表示の時は非表示になっているセルを戻す
+						if(checkCellDoubleFlg(this.refs.btnRef0.getCellMode()) ){
+							this.searchHidden(idx + 1);
+						}else if(checkCellTripleFlg(this.refs.btnRef0.getCellMode()) ){
+							this.searchHidden(idx + 1);
+							this.searchHidden(idx + 2);
+						}
 				}
 
 				this.refs.btnRef0.setCellMode(flg);
@@ -204,10 +263,19 @@ class Row extends React.Component{
 			case 1:
 				nextCellFlg = this.refs.btnRef2.getCellMode();
 
-				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+				if(checkNextCellHidden(flg)){
+					if(checkCellTripleFlg(flg)){
+						this.refs.btnRef3.setCellMode(DISPMODE.hidden);
+					}
 					this.refs.btnRef2.setCellMode(DISPMODE.hidden);
-				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
-					this.refs.btnRef2.setCellMode(DISPMODE.default);
+				}else if(flg == DISPMODE.redisp){
+					//再表示の時は非表示になっているセルを戻す
+						if(checkCellDoubleFlg(this.refs.btnRef1.getCellMode()) ){
+							this.searchHidden(idx + 1);
+						}else if(checkCellTripleFlg(this.refs.btnRef1.getCellMode()) ){
+							this.searchHidden(idx + 1);
+							this.searchHidden(idx + 2);
+						}
 				}
 
 				this.refs.btnRef1.setCellMode(flg);
@@ -217,10 +285,19 @@ class Row extends React.Component{
 			case 2:
 				nextCellFlg = this.refs.btnRef3.getCellMode();
 
-				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+				if(checkNextCellHidden(flg)){
+					if(checkCellTripleFlg(flg)){
+						this.refs.btnRef4.setCellMode(DISPMODE.hidden);
+					}
 					this.refs.btnRef3.setCellMode(DISPMODE.hidden);
-				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
-					this.refs.btnRef3.setCellMode(DISPMODE.default);
+				}else if(flg == DISPMODE.redisp){
+					//再表示の時は非表示になっているセルを戻す
+						if(checkCellDoubleFlg(this.refs.btnRef2.getCellMode()) ){
+							this.searchHidden(idx + 1);
+						}else if(checkCellTripleFlg(this.refs.btnRef2.getCellMode()) ){
+							this.searchHidden(idx + 1);
+							this.searchHidden(idx + 2);
+						}
 				}
 
 				this.refs.btnRef2.setCellMode(flg);
@@ -314,6 +391,7 @@ ReactDOM.render(
 );
 
 
+/*
 
 //----------------
 class TheChild extends React.Component{
@@ -335,7 +413,6 @@ class TheChild extends React.Component{
 	}
 }
 
-/*
 //refで子に引数渡して子でsetStateさせる
 class TheParent extends React.Component{
 

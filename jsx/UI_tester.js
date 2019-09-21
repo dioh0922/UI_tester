@@ -173,8 +173,6 @@ class Row extends React.Component{
 
 	searchHidden(id){
 
-		//別の要素のところ以降は非表示でも変えないようにするには?
-
 		const clearFlg = 0;
 
 		switch(id){
@@ -211,7 +209,42 @@ class Row extends React.Component{
 			default:
 				break;
 		}
+	}
 
+	margeHiddenCell(id){
+		let nextCellFlg;
+
+		switch(id){
+			case 1:
+				nextCellFlg = this.refs.btnRef1.getCellMode();
+				if(checkCellDoubleFlg(nextCellFlg)){
+					this.refs.btnRef2.setCellMode(DISPMODE.default);
+				}else if(checkCellTripleFlg(nextCellFlg)){
+					this.refs.btnRef2.setCellMode(DISPMODE.default);
+					this.refs.btnRef3.setCellMode(DISPMODE.default);
+				}
+				break;
+
+			case 2:
+				nextCellFlg = this.refs.btnRef2.getCellMode();
+				if(checkCellDoubleFlg(nextCellFlg)){
+					this.refs.btnRef3.setCellMode(DISPMODE.default);
+				}else if(checkCellTripleFlg(nextCellFlg)){
+					this.refs.btnRef3.setCellMode(DISPMODE.default);
+					this.refs.btnRef4.setCellMode(DISPMODE.default);
+				}
+				break;
+
+			case 3:
+				nextCellFlg = this.refs.btnRef3.getCellMode();
+				if(checkCellDoubleFlg(nextCellFlg)){
+					this.refs.btnRef4.setCellMode(DISPMODE.default);
+				}
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	renderCell(i){
@@ -225,6 +258,7 @@ class Row extends React.Component{
 		let id;
 		let flg;
 		let nextCellFlg;
+		let confrictFlg;
 
 		if(typeof(e.target.value) != "string"){
 			id = e.target.getAttribute("data-id");
@@ -239,10 +273,14 @@ class Row extends React.Component{
 
 		switch (idx) {
 			case 0:
-				nextCellFlg = this.refs.btnRef1.getCellMode();
 
 				if(checkNextCellHidden(flg)){
+					this.margeHiddenCell(idx + 1);
 					if(checkCellTripleFlg(flg)){
+						if(checkCellTripleFlg(this.refs.btnRef2.getCellMode()) ){
+							this.refs.btnRef3.setCellMode(DISPMODE.default);
+							this.refs.btnRef4.setCellMode(DISPMODE.default);
+						}
 						this.refs.btnRef2.setCellMode(DISPMODE.hidden);
 					}
 					this.refs.btnRef1.setCellMode(DISPMODE.hidden);
@@ -261,10 +299,13 @@ class Row extends React.Component{
 				break;
 
 			case 1:
-				nextCellFlg = this.refs.btnRef2.getCellMode();
 
 				if(checkNextCellHidden(flg)){
+					this.margeHiddenCell(idx + 1);
 					if(checkCellTripleFlg(flg)){
+						if(checkCellDoubleFlg(this.refs.btnRef3.getCellMode()) ){
+							this.refs.btnRef4.setCellMode(DISPMODE.default);
+						}
 						this.refs.btnRef3.setCellMode(DISPMODE.hidden);
 					}
 					this.refs.btnRef2.setCellMode(DISPMODE.hidden);
@@ -283,9 +324,9 @@ class Row extends React.Component{
 				break;
 
 			case 2:
-				nextCellFlg = this.refs.btnRef3.getCellMode();
 
 				if(checkNextCellHidden(flg)){
+					this.margeHiddenCell(idx + 1);
 					if(checkCellTripleFlg(flg)){
 						this.refs.btnRef4.setCellMode(DISPMODE.hidden);
 					}
@@ -305,11 +346,16 @@ class Row extends React.Component{
 				break;
 
 			case 3:
-				nextCellFlg = this.refs.btnRef4.getCellMode();
 
-				if(checkNextCellHidden(flg) && nextCellFlg != DISPMODE.txtBoxDbl){
+				if(flg == DISPMODE.txtBoxTrpl){
+					flg = DISPMODE.txtBoxDbl;
+				}else if(flg == DISPMODE.btnTrpl){
+					flg = DISPMODE.btnDbl;
+				}
+
+				if(checkNextCellHidden(flg)){
 					this.refs.btnRef4.setCellMode(DISPMODE.hidden);
-				}else if(flg == DISPMODE.redisp && nextCellFlg == DISPMODE.hidden){
+				}else if(flg == DISPMODE.redisp){
 					this.refs.btnRef4.setCellMode(DISPMODE.default);
 				}
 

@@ -25,7 +25,10 @@ const SELECTITEM = {
 	txtBoxTrpl: "入力欄(3マス)",
 	button: "ボタン(1マス)",
 	btnDbl: "ボタン(2マス)",
-	btnTrpl: "ボタン(3マス)"
+	btnTrpl: "ボタン(3マス)",
+	fileSelect: "ファイル選択(1マス)",
+	fileDbl: "ファイル選択(2マス)",
+	fileTrpl: "ファイル選択(3マス)",
 }
 
 //対応する表示状態のフラグを決定する処理
@@ -55,19 +58,6 @@ function convertBtnFlg(val){
 	return flg;
 }
 
-//隣のセルを非表示にするか判定する処理
-function checkNextCellHidden(flg){
-	//2倍ボタンか2倍入力欄は隣を消す
-	if(flg == DISPMODE.txtBoxDbl
-		|| flg == DISPMODE.btnDbl
-		|| flg == DISPMODE.txtBoxTrpl
-		|| flg == DISPMODE.btnTrpl){
-		return true;
-	}else{
-		return false;
-	}
-}
-
 //2倍の大きさのフラグか判定する処理
 function checkCellDoubleFlg(flg){
 	if(flg == DISPMODE.txtBoxDbl
@@ -88,13 +78,24 @@ function checkCellTripleFlg(flg){
 	}
 }
 
+//隣のセルを非表示にするか判定するラッパー関数
+function checkNextCellHidden(flg){
+	if( checkCellDoubleFlg(flg)
+	||  checkCellTripleFlg(flg) ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 ReactDOM.render(
 	<div>
 		<h2>
 			UI試作器：5*5くらいでフォームの見た目作る
 		</h2>
 		<ul>
-			<li>隣とくっつけるのは?</li>
+			<li>選べる要素は?</li>
+			<li>セレクトボックス</li>
 		</ul>
 	</div>,
 	document.getElementById("t1")
@@ -277,7 +278,7 @@ class Row extends React.Component{
 				if(checkNextCellHidden(flg)){
 					this.margeHiddenCell(idx + 1);
 					if(checkCellTripleFlg(flg)){
-						if(checkCellTripleFlg(this.refs.btnRef2.getCellMode()) ){
+						if(checkNextCellHidden(this.refs.btnRef2.getCellMode()) ){
 							this.refs.btnRef3.setCellMode(DISPMODE.default);
 							this.refs.btnRef4.setCellMode(DISPMODE.default);
 						}
@@ -303,7 +304,7 @@ class Row extends React.Component{
 				if(checkNextCellHidden(flg)){
 					this.margeHiddenCell(idx + 1);
 					if(checkCellTripleFlg(flg)){
-						if(checkCellDoubleFlg(this.refs.btnRef3.getCellMode()) ){
+						if(checkNextCellHidden(this.refs.btnRef3.getCellMode()) ){
 							this.refs.btnRef4.setCellMode(DISPMODE.default);
 						}
 						this.refs.btnRef3.setCellMode(DISPMODE.hidden);
@@ -365,9 +366,19 @@ class Row extends React.Component{
 
 			case 4:
 				//右端からは2マスのものは配置しない
-				if(!checkNextCellHidden(flg)){
-					this.refs.btnRef4.setCellMode(flg);
+				if(flg == DISPMODE.txtBoxTrpl
+				|| flg == DISPMODE.txtBoxDbl ){
+
+					flg = DISPMODE.txtBox;
+
+				}else if(flg == DISPMODE.btnDbl
+				|| flg == DISPMODE.btnTrpl ){
+
+					flg = DISPMODE.button;
+
 				}
+
+				this.refs.btnRef4.setCellMode(flg);
 
 				break;
 
@@ -435,58 +446,3 @@ ReactDOM.render(
 	<Board />,
 	document.getElementById("root")
 );
-
-
-/*
-
-//----------------
-class TheChild extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			disp: 0,
-			value: "init",
-		}
-	}
-
-	setFlg(flg){
-		this.setState({value: flg});
-		console.log(this.state.value);
-	}
-
-	render(){
-		return <input type="button" value={this.state.value}/>;
-	}
-}
-
-//refで子に引数渡して子でsetStateさせる
-class TheParent extends React.Component{
-
-	handleClick(){
-		this.refs.child_1.setFlg("ref");
-	}
-
-	render(){
-
-		return(
-			<div onClick={this.handleClick.bind(this)}>
-				<input type="button" value="ボタンです" style={
-					{
-//						backgroundColor: "#FFDDDD",
-						height: "40px",
-						width: "600px",
-						marginTop: "10px",
-					}
-				}/>
-			</div>
-		);
-
-	}
-
-}
-
-ReactDOM.render(
-	<TheParent />,
-	document.getElementById("test_in")
-);
-*/

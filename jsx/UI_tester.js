@@ -5,13 +5,21 @@ DOMの制御を行い、動的に画面に部品を描画するプログラム
 
 //表示モードのフラグ制御の識別子
 const DISPMODE = {
-	selBox: 1,
+	selectStart: 1,
 	txtBox: 2,
 	txtBoxDbl: 3,
 	txtBoxTrpl: 4,
 	button: 5,
 	btnDbl: 6,
 	btnTrpl: 7,
+	fileSelect: 8,
+	fileDbl: 9,
+	fileTrpl: 10,
+	selBox: 11,
+	selBoxDbl: 12,
+	selBoxTrpl: 13,
+	chkBtn: 14,
+	radioBtn: 15,
 	hidden: -1,
 	redisp: -5,
 	default: 0
@@ -19,7 +27,7 @@ const DISPMODE = {
 
 //選択用の表示文字列
 const SELECTITEM = {
-	selBox: "配置するものを選択",
+	selectStart: "配置するものを選択",
 	txtBox: "入力欄(1マス)",
 	txtBoxDbl: "入力欄(2マス)",
 	txtBoxTrpl: "入力欄(3マス)",
@@ -29,14 +37,19 @@ const SELECTITEM = {
 	fileSelect: "ファイル選択(1マス)",
 	fileDbl: "ファイル選択(2マス)",
 	fileTrpl: "ファイル選択(3マス)",
+	selBox: "セレクトボックス(1マス)",
+	selBoxDbl: "セレクトボックス(2マス)",
+	selBoxTrpl: "セレクトボックス(3マス)",
+	chkBtn: "チェックボタン",
+	radioBtn: "ラジオボタン",
 }
 
 //対応する表示状態のフラグを決定する処理
 function convertBtnFlg(val){
 	let flg;
 
-	if(val == SELECTITEM.selBox){
-		flg = DISPMODE.selBox;
+	if(val == SELECTITEM.selectStart){
+		flg = DISPMODE.selectStart;
 	}else if(val == SELECTITEM.txtBox){
 		flg = DISPMODE.txtBox;
 	}else if(val == SELECTITEM.txtBoxDbl){
@@ -51,6 +64,22 @@ function convertBtnFlg(val){
 		flg = DISPMODE.txtBoxTrpl;
 	}else if(val == SELECTITEM.btnTrpl){
 		flg = DISPMODE.btnTrpl;
+	}else if(val == SELECTITEM.fileSelect){
+		flg = DISPMODE.fileSelect;
+	}else if(val == SELECTITEM.fileDbl){
+		flg = DISPMODE.fileDbl;
+	}else if(val == SELECTITEM.fileTrpl){
+		flg = DISPMODE.fileTrpl;
+	}else if(val == SELECTITEM.selBox){
+		flg = DISPMODE.selBox;
+	}else if(val == SELECTITEM.selBoxDbl){
+		flg = DISPMODE.selBoxDbl;
+	}else if(val == SELECTITEM.selBoxTrpl){
+		flg = DISPMODE.selBoxTrpl;
+	}else if(val == SELECTITEM.chkBtn){
+		flg = DISPMODE.chkBtn;
+	}else if(val == SELECTITEM.radioBtn){
+		flg = DISPMODE.radioBtn;
 	}else{
 		flg = 1;
 	}
@@ -94,8 +123,7 @@ ReactDOM.render(
 			UI試作器：5*5くらいでフォームの見た目作る
 		</h2>
 		<ul>
-			<li>選べる要素は?</li>
-			<li>セレクトボックス</li>
+			<li>追加要素を表示するようにする</li>
 		</ul>
 	</div>,
 	document.getElementById("t1")
@@ -120,16 +148,24 @@ class Cell extends React.Component{
 
 	render(){
 
-		if(this.state.disp == DISPMODE.selBox){
+		if(this.state.disp == DISPMODE.selectStart){
 			return(
 				<select className="cell" >
-					<option>{this.props.value}に{SELECTITEM.selBox}</option>
+					<option>{this.props.value}に{SELECTITEM.selectStart}</option>
 					<option>{this.props.value}に{SELECTITEM.txtBox}</option>
 					<option>{this.props.value}に{SELECTITEM.txtBoxDbl}</option>
 					<option>{this.props.value}に{SELECTITEM.txtBoxTrpl}</option>
 					<option>{this.props.value}に{SELECTITEM.button}</option>
 					<option>{this.props.value}に{SELECTITEM.btnDbl}</option>
 					<option>{this.props.value}に{SELECTITEM.btnTrpl}</option>
+					<option>{this.props.value}に{SELECTITEM.fileSelect}</option>
+					<option>{this.props.value}に{SELECTITEM.fileDbl}</option>
+					<option>{this.props.value}に{SELECTITEM.fileTrpl}</option>
+					<option>{this.props.value}に{SELECTITEM.selBox}</option>
+					<option>{this.props.value}に{SELECTITEM.selBoxDbl}</option>
+					<option>{this.props.value}に{SELECTITEM.selBoxTrpl}</option>
+					<option>{this.props.value}に{SELECTITEM.chkBtn}</option>
+					<option>{this.props.value}に{SELECTITEM.radioBtn}</option>
 				</select>
 			);
 		}else if(this.state.disp == DISPMODE.txtBox){

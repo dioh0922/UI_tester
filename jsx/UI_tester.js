@@ -90,7 +90,9 @@ function convertBtnFlg(val){
 //2倍の大きさのフラグか判定する処理
 function checkCellDoubleFlg(flg){
 	if(flg == DISPMODE.txtBoxDbl
-	|| flg == DISPMODE.btnDbl){
+	|| flg == DISPMODE.btnDbl
+	|| flg == DISPMODE.fileDbl
+	|| flg == DISPMODE.selBoxDbl){
 		return true;
 	}else{
 		return false;
@@ -100,7 +102,9 @@ function checkCellDoubleFlg(flg){
 //3倍の大きさのフラグか判定する処理
 function checkCellTripleFlg(flg){
 	if(flg == DISPMODE.txtBoxTrpl
-	|| flg == DISPMODE.btnTrpl){
+	|| flg == DISPMODE.btnTrpl
+	|| flg == DISPMODE.fileTrpl
+	|| flg == DISPMODE.selBoxTrpl){
 		return true;
 	}else{
 		return false;
@@ -182,6 +186,22 @@ class Cell extends React.Component{
 			return <img src="./Img/btnTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
 		}else if(this.state.disp == DISPMODE.txtBoxTrpl){
 			return <img src="./Img/txtTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.fileSelect){
+			return <img src="./Img/fileImg.png" className="cell" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.fileDbl){
+			return <img src="./Img/fileDblImg.png" className="cell_double" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.fileTrpl){
+			return <img src="./Img/fileTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.selBox){
+			return <img src="./Img/selBoxImg.png" className="cell" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.selBoxDbl){
+			return <img src="./Img/selBoxDblImg.png" className="cell_double" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.selBoxTrpl){
+			return <img src="./Img/selBoxTrplImg.png" className="cell_triple" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.chkBtn){
+			return <img src="./Img/chkBtnImg.png" className="cell" data-id={this.props.value}/>;
+		}else if(this.state.disp == DISPMODE.radioBtn){
+			return <img src="./Img/radioBtnImg.png" className="cell" data-id={this.props.value}/>;
 		}else{
 			return <input className="cell" type="button" value={this.props.value}/>;
 		}
@@ -388,6 +408,10 @@ class Row extends React.Component{
 					flg = DISPMODE.txtBoxDbl;
 				}else if(flg == DISPMODE.btnTrpl){
 					flg = DISPMODE.btnDbl;
+				}else if(flg == DISPMODE.fileTrpl){
+					flg = DISPMODE.fileDbl;
+				}else if(flg == DISPMODE.selBoxTrpl){
+					flg = DISPMODE.selBoxDbl;
 				}
 
 				if(checkNextCellHidden(flg)){
@@ -401,17 +425,19 @@ class Row extends React.Component{
 				break;
 
 			case 4:
-				//右端からは2マスのものは配置しない
+				//右端には2マス以上のものは配置しない
 				if(flg == DISPMODE.txtBoxTrpl
 				|| flg == DISPMODE.txtBoxDbl ){
-
 					flg = DISPMODE.txtBox;
-
 				}else if(flg == DISPMODE.btnDbl
 				|| flg == DISPMODE.btnTrpl ){
-
 					flg = DISPMODE.button;
-
+				}else if(flg == DISPMODE.fileDbl
+				|| flg == DISPMODE.fileTrpl){
+					flg = DISPMODE.fileSelect;
+				}else if(flg == DISPMODE.selBoxDbl
+				|| flg == DISPMODE.selBoxTrpl){
+					flg = DISPMODE.selBox;
 				}
 
 				this.refs.btnRef4.setCellMode(flg);

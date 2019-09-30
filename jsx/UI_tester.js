@@ -121,18 +121,6 @@ function checkNextCellHidden(flg){
 	}
 }
 
-ReactDOM.render(
-	<div>
-		<h2>
-			UI試作器：5*5くらいでフォームの見た目作る
-		</h2>
-		<ul>
-			<li>追加要素を表示するようにする</li>
-		</ul>
-	</div>,
-	document.getElementById("t1")
-);
-
 class Cell extends React.Component{
 	constructor(props){
 		super(props);
@@ -154,7 +142,7 @@ class Cell extends React.Component{
 
 		if(this.state.disp == DISPMODE.selectStart){
 			return(
-				<select className="cell" >
+				<select className="cell_selectStart" >
 					<option>{this.props.value}に{SELECTITEM.selectStart}</option>
 					<option>{this.props.value}に{SELECTITEM.txtBox}</option>
 					<option>{this.props.value}に{SELECTITEM.txtBoxDbl}</option>
@@ -219,6 +207,7 @@ class Row extends React.Component{
 		}
 	}
 
+	//全体を初期状態に戻す処理
 	allResetRow(){
 		const clearFlg = 0;
 		this.refs.btnRef0.setCellMode(clearFlg);
@@ -228,6 +217,7 @@ class Row extends React.Component{
 		this.refs.btnRef4.setCellMode(clearFlg);
 	}
 
+	//指定したセルが非表示なら初期状態に戻す処理
 	searchHidden(id){
 
 		const clearFlg = 0;
@@ -268,6 +258,7 @@ class Row extends React.Component{
 		}
 	}
 
+	//位置が被る場合に初期状態に一旦戻す処理
 	margeHiddenCell(id){
 		let nextCellFlg;
 
@@ -309,7 +300,6 @@ class Row extends React.Component{
 		return <Cell disp={this.state.disp[i % 5]} value={i} ref={ref_name}/>;
 	}
 
-	//一旦、子のコンポーネントからイベントを取り上げる
 	handleClick(e){
 
 		let id;
@@ -403,7 +393,7 @@ class Row extends React.Component{
 				break;
 
 			case 3:
-
+				//3マスのものは配置しないで縮小する
 				if(flg == DISPMODE.txtBoxTrpl){
 					flg = DISPMODE.txtBoxDbl;
 				}else if(flg == DISPMODE.btnTrpl){
@@ -479,6 +469,7 @@ class Board extends React.Component{
 		return <Row value={i} ref={refName}/>;
 	}
 
+	//各行ごとにリセットして全体を初期状態にする処理
 	allResetBoard(){
 		this.refs.rowRef0.allResetRow();
 		this.refs.rowRef1.allResetRow();
@@ -491,7 +482,7 @@ class Board extends React.Component{
 		return(
 			<div className="board">
 				<input type="button"
-					className="resetBtn"
+					className="reset_button"
 					value="配置をリセットします"
 					onClick={this.allResetBoard.bind(this)}/>
 				{this.renderRow(0)}
@@ -504,7 +495,21 @@ class Board extends React.Component{
 	}
 }
 
+//試作機部分の描画
 ReactDOM.render(
 	<Board />,
-	document.getElementById("root")
+	document.getElementById("UI")
+);
+
+//ヘッダ部分の描画
+ReactDOM.render(
+	<div>
+		<h2>アプリUI簡易試作器</h2>
+		<ul className="list_center">
+			<li>UI試作器：5*5くらいでフォームの見た目のイメージを作ります</li>
+			<li>各セルから配置するパーツを選んでください</li>
+			<li>配置位置が被ると左側にあるパーツが優先されます</li>
+		</ul>
+	</div>,
+	document.getElementById("header")
 );

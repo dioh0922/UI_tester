@@ -1,0 +1,132 @@
+body{
+	background-color: #0000FF;
+}
+
+li{
+	text-align: left;
+}
+
+ul{
+	text-align: left;
+}
+
+.list_center{
+	padding-left: 0;
+	display: inline-block;
+}
+
+.cell{
+	background: #EEEEEE;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+.cell_selectStart{
+	background: #FFFFFF;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+
+.cell_btn{
+	background: #AAAAAA;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+.cell_hidden{
+	width: 0px;
+	height: 0px;
+	display: none;
+}
+
+.cell_text{
+	background: #FFDDDD;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 100px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+.cell_double{
+	background: #FFDDDD;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 210px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+.cell_triple{
+	background: #FFDDDD;
+	border: 1px solid #AAAAAA;
+	height: 100px;
+	width: 320px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 0;
+	float: left;
+}
+
+.outer{
+	text-align: center;
+}
+
+#UI{
+	display: inline-block;
+	border: solid 1px;
+	background-color: #FFFFDD;
+}
+
+.reset_button{
+	background-color: #88FFFF;
+	clear: both;
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.board{
+	margin: auto;
+	display: inline-block;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-bottom: 40px;
+}
+
+.board-row{
+	text-align: center;
+	clear: both;
+}

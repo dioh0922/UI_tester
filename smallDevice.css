@@ -1,5 +1,5 @@
 body{
-	background-color: #0000FF;
+	background-color: #FAF6F6;
 }
 
 li{
@@ -18,8 +18,8 @@ ul{
 .cell{
 	background: #EEEEEE;
 	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 100px;
+	height: 5vh;
+	width: 5vh;
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 5px;
@@ -31,22 +31,8 @@ ul{
 .cell_selectStart{
 	background: #FFFFFF;
 	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 100px;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	padding: 0;
-	float: left;
-}
-
-
-.cell_btn{
-	background: #AAAAAA;
-	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 100px;
+	height: 5vh;
+	width: 5vh;
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 5px;
@@ -61,26 +47,13 @@ ul{
 	display: none;
 }
 
-.cell_text{
-	background: #FFDDDD;
-	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 100px;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	padding: 0;
-	float: left;
-}
-
 .cell_double{
 	background: #FFDDDD;
 	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 210px;
-	margin-left: 5px;
-	margin-right: 5px;
+	height: 5vh;
+	width: 10vh;
+	margin-left: 10px;
+	margin-right: 10px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	padding: 0;
@@ -90,10 +63,10 @@ ul{
 .cell_triple{
 	background: #FFDDDD;
 	border: 1px solid #AAAAAA;
-	height: 100px;
-	width: 320px;
-	margin-left: 5px;
-	margin-right: 5px;
+	height: 5vh;
+	width: 15vh;
+	margin-left: 15px;
+	margin-right: 15px;
 	margin-top: 5px;
 	margin-bottom: 5px;
 	padding: 0;
